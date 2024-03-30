@@ -3,7 +3,7 @@ import requests
 def llamar_api_cognitive_services(image_path):
     # URL de la API
     endpoint = "https://ocrarzobispado.cognitiveservices.azure.com/vision/v3.2/analyze"
-    subscription_key = "1e9e3d717a7e41c8845a266ef91f9e7c"
+    subscription_key = "key"
     
 #https://ocrarzobispado.cognitiveservices.azure.com/
 
