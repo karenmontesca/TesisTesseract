@@ -1,6 +1,7 @@
 import pytesseract
 from pytesseract import Output
 import cv2
+import numpy as np
 
 #Convierte la imagen a escala de grises.
 #Aplica un umbral para convertir la imagen en blanco y negro.
@@ -8,11 +9,32 @@ import cv2
 #Utiliza Tesseract en la imagen preprocesada y resalta el texto reconocido.
 
 
-myconfig = r"--psm 6 --oem 3"
-img = cv2.imread("IMG-20231124-WA0015.jpg")
+
+img = cv2.imread("glaysEDIT.png")
 
 # Convertir la imagen a escala de grises
 gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+
+# Aplicar filtro gaussiano para suavizar la imagen y reducir el ruido
+smooth_img = cv2.GaussianBlur(gray_img, (5, 5), 0)
+
+
+
+# Aplicar detección de bordes con el algoritmo de Canny
+edges_img = cv2.Canny(smooth_img, 50, 150)
+
+
+# Aplicar transformaciones morfológicas para eliminar líneas horizontales y verticales
+kernel = np.ones((5, 5), np.uint8)
+dilated_img = cv2.dilate(edges_img, kernel, iterations=1)
+eroded_img = cv2.erode(dilated_img, kernel, iterations=1)
+
+
+
+
+
+
 
 # Aplicar un umbral para convertir la imagen en blanco y negro
 _, binary_img = cv2.threshold(gray_img, 128, 255, cv2.THRESH_BINARY)
@@ -25,6 +47,7 @@ contrast_img = cv2.convertScaleAbs(binary_img, alpha=alpha, beta=beta)
 height, width, _ = img.shape
 
 # Usar la función image_to_data en la imagen preprocesada
+myconfig = r"--psm 6 --oem 3"
 data = pytesseract.image_to_data(contrast_img, config=myconfig, output_type=Output.DICT)
 
 amount_boxes = len(data['text'])

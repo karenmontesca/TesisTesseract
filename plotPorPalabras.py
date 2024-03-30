@@ -66,7 +66,7 @@ another_config_option 123
 """
 
 
-img_path = "IMG-20231124-WA0015.jpg"
+img_path = "IMGPrueba.jpg"
 
 # Cargar la imagen original
 img = cv2.imread(img_path)
